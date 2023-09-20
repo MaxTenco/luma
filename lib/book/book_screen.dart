@@ -37,10 +37,12 @@ class _BookScreenState extends State<BookScreen> {
           ),
           const SizedBox(height: 36),
           TextButton(
-            onPressed: () {
-              setState(() async {
+            onPressed: () async {
+              setState(() {
                 _stateUi = const BookUiState.loading();
-                await Future<void>.delayed(const Duration(microseconds: 500));
+              });
+              await Future<void>.delayed(const Duration(microseconds: 500));
+              setState(() {
                 _stateUi = BookUiState.results(_books.sample(1).single);
               });
             },
