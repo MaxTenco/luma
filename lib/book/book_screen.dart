@@ -17,10 +17,8 @@ class BookScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           controller.when(
-            data: (data) {
-              return BookDetails(book: data);
-            },
-            error: (error, _) => const Text('Error'),
+            data: (data) => BookDetails(book: data),
+            error: (_, __) => const Text('Error'),
             loading: () => const Expanded(
               child: Center(
                 child: CircularProgressIndicator(),
@@ -29,10 +27,8 @@ class BookScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 36),
           TextButton(
-            onPressed: () {
-              ref.read(bookControllerProvider.notifier).onNextTap();
-            },
-            child: const Text('Next'),
+            onPressed: ref.read(bookControllerProvider.notifier).onNextTap,
+            child: const Text('Press me'),
           ),
         ],
       ),

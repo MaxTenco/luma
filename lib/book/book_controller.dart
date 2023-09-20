@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'book.dart';
@@ -14,11 +15,17 @@ class BookController extends _$BookController {
 
   @override
   FutureOr<Book> build() async {
-    return (_books..shuffle()).first;
+    return _books.sample(1).single;
   }
 
-  void onNextTap() {
-    final book = (_books..shuffle()).first;
-    state = AsyncData(book);
+  Future<void> onNextTap() async {
+    state = const AsyncLoading();
+    state = AsyncData(_books.sample(1).single);
   }
 }
+
+// void _tanteCoseDaFare() {
+//   for (var i = 0; i < 1000000; i++) {
+//     final _ = Random().nextInt(100);
+//   }
+// }
