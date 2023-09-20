@@ -1,41 +1,45 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'book_controller.dart';
+import 'book.dart';
 import 'book_details.dart';
 
-class BookScreen extends ConsumerWidget {
+class BookScreen extends StatefulWidget {
   const BookScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.watch(bookControllerProvider);
+  State<BookScreen> createState() => _BookScreenState();
+}
 
+class _BookScreenState extends State<BookScreen> {
+  static const _books = [
+    Book(title: 'Harry Potter'),
+    Book(title: 'The Lord of the Rings'),
+    Book(title: 'IT'),
+  ];
+  var _currentBook = _books.sample(1).single;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          controller.when(
-            data: (data) {
-              return BookDetails(book: data);
-            },
-            error: (error, _) => const Text('Error'),
-            loading: () => const Expanded(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          ),
+          BookDetails(_currentBook),
           const SizedBox(height: 36),
           TextButton(
-            onPressed: () {
-              ref.read(bookControllerProvider.notifier).onNextTap();
-            },
+            onPressed: _setState,
             child: const Text('Next'),
           ),
         ],
       ),
     );
+  }
+
+  void _setState() {
+    setState(() {
+      _currentBook = _books.sample(1).single;
+    });
   }
 }

@@ -1,5 +1,5 @@
 class Book {
-  Book({required this.title});
+  const Book({required this.title});
 
   final String title;
 }
