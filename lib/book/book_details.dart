@@ -1,33 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'book.dart';
 
-class BookDetails extends StatefulWidget {
-  const BookDetails({
-    required this.book,
+class BookDetails extends HookWidget {
+  const BookDetails(
+    this.book, {
     super.key,
   });
   final Book book;
 
   @override
-  State<BookDetails> createState() => _BookDetailsState();
-}
-
-class _BookDetailsState extends State<BookDetails> {
-  bool _showTitle = false;
-
-  @override
   Widget build(BuildContext context) {
-    return _showTitle
-        ? Center(
-            child: Text(widget.book.title),
-          )
+    final showTitle = useState(false);
+
+    return showTitle.value
+        ? Center(child: Text(book.title))
         : TextButton(
-            onPressed: () {
-              setState(() {
-                _showTitle = true;
-              });
-            },
+            onPressed: () => showTitle.value = !showTitle.value,
             child: const Text('Show title'),
           );
   }

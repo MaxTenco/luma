@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'book_controller.dart';
 import 'book_details.dart';
@@ -16,17 +16,10 @@ class BookScreen extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          controller.when(
-            data: (data) {
-              return BookDetails(book: data);
-            },
-            error: (error, _) => const Text('Error'),
-            loading: () => const Expanded(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          ),
+          switch (controller) {
+            AsyncData(:final value) => BookDetails(value),
+            _ => const SizedBox(),
+          },
           const SizedBox(height: 36),
           TextButton(
             onPressed: () {
