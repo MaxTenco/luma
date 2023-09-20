@@ -46,14 +46,6 @@ class _BookScreenState extends State<BookScreen> {
             },
             child: const Text('Compute'),
           ),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _stateUi = const BookUiState.loading();
-              });
-            },
-            child: const Text('Loading'),
-          ),
         ],
       ),
     );
