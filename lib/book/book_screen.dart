@@ -21,8 +21,20 @@ class _BookScreenState extends State<BookScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    print('Parent has been initialized: hello, ${widget.hashCode}');
+  }
+
+  @override
+  void dispose() {
+    print('Parent has been disposed: goodbye, ${widget.hashCode}');
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print('Parent has been rebuilt; hashes: $hashCode, ${widget.hashCode}');
+    print('Parent has been rebuilt; hashes: $hashCode');
 
     return Scaffold(
       body: Column(
