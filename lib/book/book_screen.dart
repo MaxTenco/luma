@@ -9,21 +9,21 @@ class BookScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.watch(bookControllerProvider);
+    final book = ref.watch(bookControllerProvider);
 
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          controller.when(
-            data: (data) {
-              return BookDetails(book: data);
-            },
-            error: (error, _) => const Text('Error'),
-            loading: () => const Expanded(
-              child: Center(
-                child: CircularProgressIndicator(),
+          Center(
+            child: book.when(
+              data: BookDetails.new,
+              error: (error, _) => const Text('Error'),
+              loading: () => const Expanded(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
               ),
             ),
           ),

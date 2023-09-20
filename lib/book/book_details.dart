@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'book.dart';
 
 class BookDetails extends StatefulWidget {
-  const BookDetails({
-    required this.book,
+  const BookDetails(
+    this.book, {
     super.key,
   });
   final Book book;
@@ -18,6 +18,7 @@ class _BookDetailsState extends State<BookDetails> {
 
   @override
   Widget build(BuildContext context) {
+    print('rebuilt!');
     return _showTitle
         ? Center(
             child: Text(widget.book.title),
