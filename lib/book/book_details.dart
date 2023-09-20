@@ -30,7 +30,7 @@ class _BookDetailsState extends State<BookDetails> {
 
   @override
   Widget build(BuildContext context) {
-    print('Child has been rebuilt; hashes: $hashCode, ${widget.hashCode}');
+    print('Child has been rebuilt; hashes: $hashCode');
     return _showTitle
         ? Center(child: Text(widget.book.title))
         : TextButton(
