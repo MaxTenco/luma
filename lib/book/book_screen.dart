@@ -1,35 +1,58 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'book_controller.dart';
+import 'book.dart';
 import 'book_details.dart';
+import 'book_ui_state.dart';
 
-class BookScreen extends ConsumerWidget {
+class BookScreen extends StatefulWidget {
   const BookScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.watch(bookControllerProvider);
-    print('Parent rebuilt, with hash $hashCode');
+  State<BookScreen> createState() => _BookScreenState();
+}
+
+class _BookScreenState extends State<BookScreen> {
+  var _stateUi = const BookUiState.loading();
+  static const _books = [
+    Book(title: 'Harry Potter'),
+    Book(title: 'The Lord of the Rings'),
+    Book(title: 'IT'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    print('Parent has been rebuilt; hashes: $hashCode, ${widget.hashCode}');
 
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          controller.when(
-            data: (data) => BookDetails(book: data),
-            error: (_, __) => const Text('Error'),
-            loading: () => const Expanded(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+          Center(
+            child: _stateUi.when(
+              results: BookDetails.new,
+              loading: CircularProgressIndicator.new,
             ),
           ),
           const SizedBox(height: 36),
           TextButton(
-            onPressed: ref.read(bookControllerProvider.notifier).onNextTap,
-            child: const Text('Press me'),
+            onPressed: () {
+              setState(() async {
+                _stateUi = const BookUiState.loading();
+                await Future<void>.delayed(const Duration(microseconds: 500));
+                _stateUi = BookUiState.results(_books.sample(1).single);
+              });
+            },
+            child: const Text('Compute'),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _stateUi = const BookUiState.loading();
+              });
+            },
+            child: const Text('Loading'),
           ),
         ],
       ),
