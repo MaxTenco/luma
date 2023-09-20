@@ -1,15 +1,28 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'book_controller.dart';
+import 'book.dart';
 import 'book_details.dart';
+import 'book_ui_state.dart';
 
-class BookScreen extends ConsumerWidget {
+class BookScreen extends StatefulWidget {
   const BookScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final book = ref.watch(bookControllerProvider);
+  State<BookScreen> createState() => _BookScreenState();
+}
+
+class _BookScreenState extends State<BookScreen> {
+  var _stateUi = const BookUiState.loading();
+  static const _books = [
+    Book(title: 'Harry Potter'),
+    Book(title: 'The Lord of the Rings'),
+    Book(title: 'IT'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    print('parent rebuild');
 
     return Scaffold(
       body: Column(
@@ -17,22 +30,27 @@ class BookScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Center(
-            child: book.when(
-              data: BookDetails.new,
-              error: (error, _) => const Text('Error'),
-              loading: () => const Expanded(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ),
+            child: _stateUi.when(
+              results: BookDetails.new,
+              loading: CircularProgressIndicator.new,
             ),
           ),
           const SizedBox(height: 36),
           TextButton(
             onPressed: () {
-              ref.read(bookControllerProvider.notifier).onNextTap();
+              setState(() {
+                _stateUi = BookUiState.results(_books.sample(1).single);
+              });
             },
-            child: const Text('Next'),
+            child: const Text('Data'),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _stateUi = const BookUiState.loading();
+              });
+            },
+            child: const Text('Loading'),
           ),
         ],
       ),
