@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:luma/book/book_controller.dart';
-import 'package:luma/book/book_details.dart';
+
+import 'book_controller.dart';
+import 'book_details.dart';
 
 class BookScreen extends ConsumerWidget {
   const BookScreen({super.key});

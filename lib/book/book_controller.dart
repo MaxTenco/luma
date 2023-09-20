@@ -1,5 +1,6 @@
-import 'package:luma/book/book.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import 'book.dart';
 
 part 'book_controller.g.dart';
 

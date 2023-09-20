@@ -4,10 +4,9 @@ import 'book.dart';
 
 class BookDetails extends StatefulWidget {
   const BookDetails({
-    super.key,
     required this.book,
+    super.key,
   });
-
   final Book book;
 
   @override
