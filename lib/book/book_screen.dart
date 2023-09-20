@@ -10,6 +10,7 @@ class BookScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(bookControllerProvider);
+    print('Parent rebuilt, with hash $hashCode');
 
     return Scaffold(
       body: Column(

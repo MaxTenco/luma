@@ -19,13 +19,9 @@ class BookController extends _$BookController {
   }
 
   Future<void> onNextTap() async {
+    print('Setting state to `loading`');
     state = const AsyncLoading();
+    print('Setting state to `data`');
     state = AsyncData(_books.sample(1).single);
   }
 }
-
-// void _tanteCoseDaFare() {
-//   for (var i = 0; i < 1000000; i++) {
-//     final _ = Random().nextInt(100);
-//   }
-// }

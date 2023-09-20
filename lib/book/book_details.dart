@@ -18,10 +18,9 @@ class _BookDetailsState extends State<BookDetails> {
 
   @override
   Widget build(BuildContext context) {
+    print('Child rebuilt, with hash $hashCode');
     return _showTitle
-        ? Center(
-            child: Text(widget.book.title),
-          )
+        ? Center(child: Text(widget.book.title))
         : TextButton(
             onPressed: () {
               setState(() {
