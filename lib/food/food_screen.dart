@@ -1,46 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'food.dart';
-import 'food_controller.dart';
+import 'imperative_approach.dart';
 
 class FoodScreen extends ConsumerWidget {
   const FoodScreen({super.key});
 
-  List<Widget> _list(List<Food> foods) {
-    return List.generate(
-      foods.length,
-      (index) => Text(foods[index].name),
-    );
-  }
-
-  Widget _body(WidgetRef ref, List<Food> foods) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const SizedBox(height: 80),
-        ElevatedButton(
-          onPressed: () {
-            ref.read(foodControllerProvider.notifier).applyFilter();
-          },
-          child: const Text('Press Me'),
-        ),
-        const SizedBox(height: 80),
-        ..._list(foods),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final foods = ref.watch(foodControllerProvider);
+    final foods = ref.watch(filteredFoodControllerProvider);
 
     return Scaffold(
-      body: foods.when(
-        data: (data) => _body(ref, data.foods),
-        error: (error, s) => Container(),
-        loading: () => const CircularProgressIndicator(),
+      body: WillPopScope(
+        onWillPop: () async {
+          if (foods case AsyncLoading()) return false;
+          return true;
+        },
+        child: Stack(
+          children: [
+            if (foods.isLoading && !foods.isReloading)
+              const Positioned.fill(
+                child: Opacity(
+                  opacity: 0.4,
+                  child: ColoredBox(
+                    color: Colors.red,
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                ),
+              ),
+            RefreshIndicator(
+              onRefresh: () async {
+                ref.invalidate(filteredFoodControllerProvider);
+              },
+              child: ListView(
+                children: [
+                  const SizedBox(height: 80),
+                  TextField(
+                    onChanged: (value) {
+                      ref.read(filteredFoodControllerProvider.notifier).filter(value);
+                      ref.read(filteredFoodControllerProvider.notifier).onTextChange(value);
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon:
+                          foods.asData?.value.showButton ?? false ? const Icon(Icons.check) : null,
+                      suffixIcon: IconButton(
+                        onPressed: ref.read(filteredFoodControllerProvider.notifier).clear,
+                        icon: const Icon(Icons.delete),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 80),
+                  ...foods.when(
+                    data: (data) => List.generate(
+                      data.foods.length,
+                      (index) => Text(data.foods[index].name),
+                    ),
+                    error: (error, s) => [Container()],
+                    loading: () => [Container()],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+
+
+
+
+
+/*
+  screen --> filtered
+  filtri --> screen
+  filtered --> filtri
+*/

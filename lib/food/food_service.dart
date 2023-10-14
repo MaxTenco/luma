@@ -11,6 +11,7 @@ FoodService foodService(FoodServiceRef ref) {
 
 class FoodService {
   Future<List<Food>> findAll() async {
+    await Future<void>.delayed(const Duration(seconds: 6));
     return [
       Food(name: 'Pizza'),
       Food(name: 'Pasta'),
