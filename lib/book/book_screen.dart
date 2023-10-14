@@ -17,6 +17,7 @@ class _BookScreenState extends State<BookScreen> {
     Book(title: 'The Lord of the Rings'),
     Book(title: 'IT'),
   ];
+
   var _currentBook = _books.sample(1).single;
 
   @override
