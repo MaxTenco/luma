@@ -5,6 +5,7 @@ import 'food_service.dart';
 
 part 'imperative_approach.g.dart';
 
+// imperative, centralized approach, comes with a price
 @riverpod
 class FilteredFoodController extends _$FilteredFoodController {
   late FoodService _service;

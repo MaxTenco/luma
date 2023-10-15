@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'imperative_approach.dart';
+import 'declarative_approach.dart';
 
 class FoodScreen extends ConsumerWidget {
   const FoodScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final foods = ref.watch(filteredFoodControllerProvider);
+    // final foods = ref.watch(filteredFoodControllerProvider);
+    final foods = ref.watch(foodState.filteredFoods);
+    final showButton = ref.watch(foodState.showButton);
 
     return Scaffold(
       body: WillPopScope(
@@ -29,22 +31,19 @@ class FoodScreen extends ConsumerWidget {
                 ),
               ),
             RefreshIndicator(
-              onRefresh: () async {
-                ref.invalidate(filteredFoodControllerProvider);
+              onRefresh: () {
+                ref.invalidate(foodState.foods);
+                return ref.read(foodState.foods.future);
               },
               child: ListView(
                 children: [
                   const SizedBox(height: 80),
                   TextField(
-                    onChanged: (value) {
-                      ref.read(filteredFoodControllerProvider.notifier).filter(value);
-                      ref.read(filteredFoodControllerProvider.notifier).onTextChange(value);
-                    },
+                    onChanged: ref.read(foodState.filtersController).onChange,
                     decoration: InputDecoration(
-                      prefixIcon:
-                          foods.asData?.value.showButton ?? false ? const Icon(Icons.check) : null,
+                      prefixIcon: showButton ? const Icon(Icons.check) : null,
                       suffixIcon: IconButton(
-                        onPressed: ref.read(filteredFoodControllerProvider.notifier).clear,
+                        onPressed: ref.read(foodState.filtersController).clear,
                         icon: const Icon(Icons.delete),
                       ),
                     ),
@@ -52,8 +51,8 @@ class FoodScreen extends ConsumerWidget {
                   const SizedBox(height: 80),
                   ...foods.when(
                     data: (data) => List.generate(
-                      data.foods.length,
-                      (index) => Text(data.foods[index].name),
+                      data.length,
+                      (index) => Text(data[index].name),
                     ),
                     error: (error, s) => [Container()],
                     loading: () => [Container()],
