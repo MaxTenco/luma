@@ -7,14 +7,12 @@ part 'declarative_approach.g.dart';
 
 // state aggregator / facade
 final class FoodState {
-  final foods = foodsProvider;
-  final filters = foodFilterControllerProvider;
-  final filtersController = foodFilterControllerProvider.notifier;
-  final filteredFoods = filteredFoodsProvider;
-  final showButton = showButtonProvider;
+  static final foods = foodsProvider;
+  static final filters = foodFilterControllerProvider;
+  static final filtersController = foodFilterControllerProvider.notifier;
+  static final filteredFoods = filteredFoodsProvider;
+  static final showButton = showButtonProvider;
 }
-
-final foodState = FoodState();
 
 // granular, riverpod-style approaches from here below
 @riverpod

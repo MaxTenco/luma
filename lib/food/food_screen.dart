@@ -9,8 +9,8 @@ class FoodScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final foods = ref.watch(filteredFoodControllerProvider);
-    final foods = ref.watch(foodState.filteredFoods);
-    final showButton = ref.watch(foodState.showButton);
+    final foods = ref.watch(FoodState.filteredFoods);
+    final showButton = ref.watch(FoodState.showButton);
 
     return Scaffold(
       body: WillPopScope(
@@ -32,18 +32,18 @@ class FoodScreen extends ConsumerWidget {
               ),
             RefreshIndicator(
               onRefresh: () {
-                ref.invalidate(foodState.foods);
-                return ref.read(foodState.foods.future);
+                ref.invalidate(FoodState.foods);
+                return ref.read(FoodState.foods.future);
               },
               child: ListView(
                 children: [
                   const SizedBox(height: 80),
                   TextField(
-                    onChanged: ref.read(foodState.filtersController).onChange,
+                    onChanged: ref.read(FoodState.filtersController).onChange,
                     decoration: InputDecoration(
                       prefixIcon: showButton ? const Icon(Icons.check) : null,
                       suffixIcon: IconButton(
-                        onPressed: ref.read(foodState.filtersController).clear,
+                        onPressed: ref.read(FoodState.filtersController).clear,
                         icon: const Icon(Icons.delete),
                       ),
                     ),
